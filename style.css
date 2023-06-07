@@ -1,0 +1,79 @@
+@font-face {
+    font-family: 'Karla';
+    src: url(karla.ttf);
+}
+@font-face {
+    font-family: 'Sporting';
+    src: url(sporting.otf);
+}
+
+main {
+    padding: 1%;
+    margin-top: 1%;
+    background-color: rgb(183, 218, 250);
+}
+
+footer {
+    margin-top: 1%;
+}
+
+footer, header {
+    font-size: 1.5rem;
+    background-color: rgb(136, 162, 240);
+}
+
+footer, header, p, button, h3 {
+    font-family: Karla;
+}
+
+span { 
+    font-size: 1rem; 
+    font-weight: 300;
+}
+
+p { font-size: 1.3rem; }
+
+h1, h2 {
+    font-family: Sporting;
+}
+
+button {
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#container {
+    display: none;
+}
+
+#opening {
+    cursor: pointer;
+}
+body {
+    text-align: center;
+    width: 60%;
+    margin: auto;
+    margin-top: 2%;
+}
+
+h2 {     
+    border: 4px solid transparent;
+    cursor: pointer;
+    display: none;
+}
+
+div {
+    width: auto;
+}
+
+#next {
+    display: none;
+}
+
+header, footer {
+    padding: 2%;
+}
+
+header {
+    font-style: italic;
+}

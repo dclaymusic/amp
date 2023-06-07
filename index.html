@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AMP Widget Test</title>
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript">
+        </script>
+    </head>
+    <script src="snd.js"></script>
+    <script>
+        let page = 0;
+        let soundsLoaded = false;
+        const numberOfSounds = 17
+        let choices = [''];
+        let aClicked = false;
+        let bClicked = false;
+
+        //loading function
+        var loading;
+        loading = setInterval(function() {
+            checkBuffers();
+        }, 10);
+
+        function toggle(id) {
+            let a = document.getElementById('A');
+            let b = document.getElementById('B');
+            if(id == 'A')
+            {
+                stopSnd();
+                aClicked = !aClicked;
+                bClicked = false;
+                if(aClicked) { 
+                    a.style.border = '4px solid transparent'; 
+                    a.style.backgroundColor = '#ff695e';
+                    if(page == 1) { playSnd(0); }
+                    if(page == 2) { playSnd(3); }
+                    if(page == 3) { 
+                        if(choices[1] == 'Theme A' && choices[2] == 'Staccato Accompaniment')
+                            { playSnd(4); }
+                        else if(choices[1] == 'Theme A' && choices[2] == 'Legato Accompaniment')
+                            { playSnd(5); }
+                        else if(choices[1] == 'Theme B' && choices[2] == 'Staccato Accompaniment')
+                            { playSnd(6); }
+                        else if(choices[1] == 'Theme B' && choices[2] == 'Legato Accompaniment')
+                            { playSnd(7); }
+                    }
+                    if(page == 4) { playSnd(8); }
+                    if(page == 5) { 
+                        if(choices[4] == 'Rising Major Melody')
+                            { playSnd(10); }
+                        else if(choices[4] == 'Falling Minor Melody')
+                            { playSnd(11); }
+                    }
+                    if(page == 6) { playSnd(12); }
+                    if(page == 7) { 
+                        if(choices[6] == 'Trombone')
+                            { playSnd(14); }
+                        else if(choices[6] == 'Horn')
+                            { playSnd(15); }
+                    }
+                }
+                if(!aClicked) { 
+                    a.style.border = '4px solid transparent'; 
+                    a.style.backgroundColor = 'rgba(0,0,0,0)'
+                }
+                b.style.border = '4px solid transparent';
+                b.style.backgroundColor = 'rgba(0,0,0,0)';
+                if(page == 1) { choices[page] = 'Theme A'; }
+                if(page == 2) { choices[page] = 'Staccato Accompaniment'; }
+                if(page == 4) { choices[page] = 'Rising Major Melody'; }
+                if(page == 6) { choices[page] = 'Trombone'; }
+
+            }
+            else
+            {
+                stopSnd();
+                bClicked = !bClicked;
+                aClicked = false;
+                if(bClicked) { 
+                    b.style.border = '4px solid transparent'; 
+                    b.style.backgroundColor = '#ff695e';
+                    if(page == 1) { playSnd(1); }
+                    if(page == 2) { playSnd(2); }
+                    if(page == 4) { playSnd(9); }
+                    if(page == 6) { playSnd(13); } 
+                }
+                if(!bClicked) { 
+                    b.style.border = '4px solid transparent'; 
+                    b.style.backgroundColor = 'rgba(0,0,0,0)';
+                }
+                a.style.border = '4px solid transparent';
+                a.style.backgroundColor = 'rgba(0,0,0,0)';
+                if(page == 1) { choices[page] = 'Theme B'; }
+                if(page == 2) { choices[page] = 'Legato Accompaniment'; }
+                if(page == 4) { choices[page] = 'Falling Minor Melody'; }
+                if(page == 6) { choices[page] = 'Viola'; }
+
+            }
+            if(page != 8 && (aClicked || bClicked)) { document.getElementById('next').style.display = 'inline'; }
+            else { document.getElementById('next').style.display = 'none'; }
+        }
+
+        function nextPage() { 
+            stopSnd(); 
+            aClicked = false;
+            bClicked = false;
+            page++;
+            let title = document.getElementById('title');
+            let p1 = document.getElementById('p1');
+            let p2 = document.getElementById('p2');
+            let a = document.getElementById('A');
+            let b = document.getElementById('B');
+
+            document.getElementById('next').style.display = 'none';
+
+            if(page > 0) { 
+                a.style.display = 'block';
+                b.style.display = 'block';
+                a.style.backgroundColor = 'rgb(0,0,0,0)';
+                b.style.backgroundColor = 'rgb(0,0,0,0)';
+            }
+            if(page == 1) // theme
+            {
+                title.innerHTML = 'Movement 1 - Theme';
+                p1.innerHTML = 'Click to hear and select Theme A or Theme B.';
+                // p2.innerHTML = '';
+                a.innerHTML = 'Theme A';
+                b.innerHTML = 'Theme B';
+                a.style.border = '4px solid transparent';
+                b.style.border = '4px solid transparent';
+            }
+            else if(page == 2) // accomp
+            {
+                title.innerHTML = 'Movement 1 - Accompaniment';
+                p1.innerHTML = 'Click to hear and select a Staccato or Legato accompaniment.';
+                // p2.innerHTML = '';
+                a.innerHTML = 'Staccato Accompaniment';
+                b.innerHTML = 'Legato Accompaniment';
+                a.style.border = '4px solid transparent';
+                b.style.border = '4px solid transparent';
+            }
+            else if(page == 3) // hear mvt 1
+            {
+                title.innerHTML = 'Movement 1 - Full Version';
+                p1.innerHTML = 'Click to listen to your whole version of Movement 1.';
+                // p2.innerHTML = '';
+                a.innerHTML = choices[1] + ' with ' + choices[2];
+                a.style.border = '4px solid transparent';
+                b.style.border = '4px solid transparent';
+                b.style.display = 'none';
+            }
+            else if(page == 4) // melody
+            {
+                title.innerHTML = 'Movement 2 - Melody';
+                p1.innerHTML = 'Click to hear and select the Rising Major or Falling Minor melody.';
+                // p2.innerHTML = '';
+                a.innerHTML = 'Rising Major Melody';
+                b.innerHTML = 'Falling Minor Melody';
+                a.style.border = '4px solid transparent';
+                b.style.border = '4px solid transparent';
+            }
+            else if(page == 5) // hear mvt 2
+            {
+                title.innerHTML = 'Movement 2 - Full Version';
+                p1.innerHTML = 'Click to listen to your whole version of Movement 2.';
+                // p2.innerHTML = '';
+                a.innerHTML = choices[4] + ' with Accompaniment';
+                a.style.border = '4px solid transparent';
+                b.style.border = '4px solid transparent';
+                b.style.display = 'none';
+            }
+            else if(page == 6) // theme
+            {
+                title.innerHTML = 'Movement 3 - Timbre';
+                p1.innerHTML = 'Click to hear and select the instrumental timbre for Mrs. Sousaphone&#39s Theme.';
+                // p2.innerHTML = '';
+                a.innerHTML = 'Trombone';
+                b.innerHTML = 'Viola';
+                a.style.border = '4px solid transparent';
+                b.style.border = '4px solid transparent';
+            }
+            else if(page == 7) // hear mvt 3
+            {
+                title.innerHTML = 'Movement 3 - Full Version';
+                p1.innerHTML = 'Click to listen to your whole version of Movement 3.';
+                // p2.innerHTML = '';
+                a.innerHTML = 'The ' + choices[6] + ' as Mrs. Sousaphone&#39s Theme';
+                a.style.border = '4px solid transparent';
+                b.style.border = '4px solid transparent';
+                b.style.display = 'none';  
+            }
+            else if(page == 8) // hear all movements
+            {
+                title.innerHTML = 'Movement 4';
+                p1.innerHTML = 'Click to listen to the Finale!';
+                a.innerHTML = 'Play Movement 4';
+                a.style.border = '4px solid transparent';
+                b.style.border = '4px solid transparent';
+                b.style.display = 'none';
+            }
+        }
+    </script>
+    <body>
+        <header>
+            Acoustic Music Project <br>
+            <span>Test Widget by Danny Clay, June 2023</span>
+        </header>
+        <main>
+            <div id="container">
+                <h1 id="title"></h1>
+                <p id="p1">Sounds Are Loading...</p>
+                <h2 id='A' onclick="toggle('A')"></h2>
+                <h2 id="B" onclick="toggle('B')"></h2>
+                <p id="p2"></p>
+            </div>
+            <div id="opening" onclick="initSnd()">
+                <p>Click to Play.</p>
+            </div>
+        </main>
+        <footer>
+            <button id="next" onclick="nextPage()">Next</button>
+        </footer>
+    </body>
+</html>
